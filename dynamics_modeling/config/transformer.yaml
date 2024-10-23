@@ -1,0 +1,53 @@
+defaults:
+  - _self_
+  - data: null
+  - optim: null
+  - inr: null
+  - wandb: null
+  - model: null
+  - train: null
+
+data:
+  dir: "/data/serrano/"
+  dataset_name: "navier-stokes-dino" 
+  ntrain : 
+  ntest : 
+  sub_from : 1
+  sub_tr : 4
+  sub_te : 4
+  seed: 123
+  same_grid: True
+  seq_inter_len : 20
+  seq_extra_len : 20
+
+optim:
+  batch_size: 32
+  batch_size_val: 
+  lr : 1e-3
+  weight_decay: 1e-2 #0
+  gamma_step : 0.9
+  epochs : 500
+  min_noise: 1e-2
+  threshold: 1.0
+
+wandb:
+  entity: "spatiotemp-isir"
+  project: aroma
+  name: 
+  id: 
+  dir: 
+  sweep_id: 
+  saved_checkpoint: True
+  checkpoint_path: $WANDB_DIR/navier-stokes-dino/inr/golden-dawn-1123.pt 
+
+model:
+  #hub_name: sogeeking/zebra_burgers_big
+  hidden_size: 128 #192,#1152,
+  depth: 4 #4
+  num_heads: 4 #6
+  mlp_ratio: 4.0 #4.0
+  class_dropout_prob: 0.1
+
+hydra:
+  run:
+    dir: "./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}"

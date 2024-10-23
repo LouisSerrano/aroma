@@ -1,0 +1,58 @@
+defaults:
+  - _self_
+  - data: null
+  - optim: null
+  - inr: null
+  - wandb: null
+
+data:
+  dir: "/data/serrano/"
+  dataset_name: "navier-stokes-dino" 
+  ntrain : 
+  ntest : 
+  sub_from : 1
+  sub_tr : 4 #0.015625
+  sub_te : 4 #0.015625
+  seed: 123
+  same_grid: True
+  seq_inter_len : 20 
+  seq_extra_len : 20
+
+optim:
+  batch_size: 64
+  batch_size_val: 
+  lr_inr : 1e-3
+  gamma_step : 0.9
+  lr_code : 0.01
+  weight_decay: 0.01
+  epochs : 10000
+
+wandb:
+  entity: "spatiotemp-isir"
+  project: aroma
+  name: 
+  id: 
+  dir:
+  sweep_id:
+  saved_checkpoint : False #False
+  checkpoint_path : 
+
+inr:
+  hidden_dim: 128
+  dim: 64 # 128
+  depth_inr: 3 #2
+  encode_geo: false
+  num_self_attentions: 3
+  num_latents: 32 #16
+  latent_dim: 8 #8
+  latent_heads: 4
+  latent_dim_head: 32 #64
+  cross_heads: 4
+  cross_dim_head: 32 #64
+  kl_weight: 1e-5
+  frequencies: [2, 3]
+  num_freq: 12
+  dropout_sequence: 0.1
+  mlp_feature_dim: 16
+  bottleneck_index: 0
+  max_pos_encoding_freq: 4

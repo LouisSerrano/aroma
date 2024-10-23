@@ -1,0 +1,66 @@
+defaults:
+  - _self_
+  - data: null
+  - optim: null
+  - inr: null
+  - wandb: null
+
+data:
+  dir: "PATH_TO_DATA"
+  dataset_name: "KS" 
+  ntrain : 
+  ntest : 
+  sub_from : 1
+  sub_tr : 1 #0.015625
+  sub_te : 1 #0.015625
+  seed: 123
+  same_grid: True
+  seq_inter_len : 30 
+  seq_extra_len : 0
+
+optim:
+  batch_size: 64 #25
+  batch_size_val: 
+  lr_inr : 1e-3
+  gamma_step : 0.9
+  lr_code : 0.01
+  weight_decay: 0
+  epochs : 5000
+
+wandb:
+  entity: "spatiotemp-isir"
+  project: aroma
+  name: 
+  id: 
+  dir:
+  sweep_id:
+  saved_checkpoint : False #False
+  checkpoint_path : 
+
+inr:
+  hidden_dim: 128 
+  dim: 128
+  depth_inr: 3 #2
+  encode_geo: false 
+  num_self_attentions: 3 #6
+  num_latents: 32 #64 #64 #32 #16
+  latent_dim: 128 #8
+  latent_heads: 4
+  latent_dim_head: 32 #64
+  cross_heads: 4 #8 # 4
+  cross_dim_head: 32 #64
+  kl_weight: 0 #1e-5 #1e-5 #1e-6 #1e-8
+  frequencies: [4, 6, 7]
+  num_freq: 12
+  dropout_sequence: 0.1
+  mlp_feature_dim: 128
+  bottleneck_index: 0 #2
+  max_pos_encoding_freq: 4
+
+optimizer:
+  name: adam
+  args: {lr: 1.e-4}
+max_epoch: 400
+
+eval_epoch: 10
+vis_epoch: 50

@@ -1,0 +1,92 @@
+defaults:
+  - _self_
+  - data: null
+  - optim: null
+  - inr: null
+  - wandb: null
+
+data:
+  dir: "PATH_TO_DATA"
+  dataset_name: "navier-stokes-1e-4" 
+  ntrain : 1000
+  ntest : 200
+  sub_from : 1
+  sub_tr : 1 #0.015625
+  sub_te : 1 #0.015625
+  seed: 123
+  same_grid: True
+  seq_inter_len : 30 
+  seq_extra_len : 0
+
+optim:
+  batch_size: 64
+  batch_size_val: 
+  lr : 1e-3 #5e-6
+  gamma_step : 0.9
+  lr_code : 0.01
+  weight_decay: 0
+  epochs : 3000
+  min_noise: 1e-3
+  threshold: 0.5
+
+wandb:
+  entity: "spatiotemp-isir"
+  project: aroma
+  name: 
+  id: 
+  dir:
+  sweep_id:
+  saved_checkpoint : True #False
+  checkpoint_path: $WANDB_DIR/navier-stokes-1e-4/inr/bumbling-sun-111.pt
+  resume_training : False #False
+  
+model:
+  latent_size: 16 #1061
+  hidden_size: 192 #
+  intermediate_size: 128
+  num_hidden_layers: 3
+  num_attention_heads: 12
+  num_key_value_heads: null 
+  hidden_act: "silu"
+  max_position_embeddings: 728
+  initializer_range: 0.02
+  rms_norm_eps: 1e-6
+  use_cache: true
+  pad_token_id: null
+  bos_token_id: null #0
+  eos_token_id: null #0
+  pretraining_tp: 1
+  tie_word_embeddings: false
+  rope_theta: 10000.0
+  rope_scaling: null
+  attention_bias: false
+  bidirectional: false
+
+train:
+  output_dir : #'/data/serrano/foundation-model/zebra'
+  auto_find_batch_size : false
+  per_device_train_batch_size: 16
+  run_name : 'causal'
+  evaluation_strategy : 'steps'
+  do_train : true
+  save_strategy : 'steps'
+  eval_steps : 100000
+  logging_steps : 1
+  save_steps : 10000
+  learning_rate : 1e-3
+  # per_device_train_batch_size : 32
+  # per_device_eval_batch_size : 32
+  weight_decay : 0.01
+  # warmup_ratio : 0.1
+  gradient_accumulation_steps : 1
+  save_total_limit : 3
+  num_train_epochs : 1 #01000
+  max_steps: 1000000
+  report_to : "wandb"
+  load_best_model_at_end : false
+  remove_unused_columns: false
+  label_names: "latent_codes"
+  
+
+eval_epoch: 10
+vis_epoch: 50

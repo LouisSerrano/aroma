@@ -1,0 +1,63 @@
+defaults:
+  - _self_
+  - data: null
+  - optim: null
+  - inr: null
+  - wandb: null
+  - model: null
+  - train: null
+
+data:
+  dir: "/data/wangt/mp_pde"
+  dataset_name: "mp-pde-burgers" 
+  ntrain : 
+  ntest : 
+  sub_from : 1
+  sub_tr : 2
+  sub_te : 2
+  seed: 123
+  same_grid: True
+  seq_inter_len : 50 #20
+  seq_extra_len : 0 #5
+
+optim:
+  batch_size: 512 #512
+  batch_size_val: 
+  lr : 1e-3
+  gamma_step : 0.9
+  lr_code : 0.01
+  weight_decay: 0.01
+  epochs : 200 #1000
+  min_noise: 1e-2 #4e-7
+  threshold: 1.0
+
+inr:
+  #run_name: golden-dawn-1123
+  #run_name: daily-meadow-1483
+
+wandb:
+  entity: "spatiotemp-isir"
+  project: aroma
+  name: 
+  id: 
+  dir: 
+  sweep_id: 
+  saved_checkpoint: True
+  checkpoint_path: $WANDB_DIR/mp-pde-burgers/inr/ckpt_confused-moon-194.pt
+  #checkpoint_path: $WANDB_DIR/mp-pde-burgers/inr/glowing-bee-115.pt
+  #checkpoint_path: $WANDB_DIR/mp-pde-burgers/inr/fast-sun-1242.pt
+  #checkpoint_path: $WANDB_DIR/mp-pde-burgers/inr/fast-sun-1242.pt
+  resume_training : False #False
+  #prev_checkpoint_path: $WANDB_DIR/mp-pde-burgers/transformers/pious-moon-128.pt
+
+model:
+  #hub_name: sogeeking/zebra_burgers_big
+  hidden_size: 128 #192,#1152,
+  depth: 4 #4
+  num_heads: 4 #6
+  mlp_ratio: 4.0 #4.0
+  class_dropout_prob: 0.1
+
+hydra:
+  run:
+    dir: "./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}"
