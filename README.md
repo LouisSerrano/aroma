@@ -64,6 +64,14 @@ For instance, for `burgers` we need to first train the VAE:
 and then once we specified the correct run_name in the config:
 `sbatch bash/burgers/refiner_burgers.sh`
 
+# Acknowledgements
+
+This project would not have been possible without these awesome repositories:
+* Perceiver implementation from lucid rains: https://github.com/lucidrains/perceiver-pytorch
+* PDE refiner : https://github.com/pdearena/pdearena
+* DIT implementation from Facebook : https://github.com/facebookresearch/DiT
+
+
 
 
 
