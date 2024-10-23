@@ -16,7 +16,10 @@ setup(
         "xarray",
         "scipy",
         "h5py",
-        "timm", 
+        "timm",
+        "datasets",
+        "diffusers",
+        "huggingface_hub"
     ],
     package_dir={"aroma": "aroma"},
     packages=find_packages()
