@@ -1,0 +1,6 @@
+local_directory: /data/serrano/
+repo_id: /sogeeking/burgers/
+file_list:
+- CE_valid_E1.h5
+- CE_test_E1.h5
+- null
