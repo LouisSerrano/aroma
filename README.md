@@ -1,8 +1,10 @@
-<a href="https://arxiv.org/abs/2406.02176"><img
-src="https://img.shields.io/badge/arXiv-AROMA-b31b1b.svg" height=25em></a>
+
 
 # 0. Official Code
 Official PyTorch implementation of AROMA | [Accepted at Neurips 2024](https://openreview.net/forum?id=Aj8RKCGwjE&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3DNeurIPS.cc%2F2024%2FConference%2FAuthors%23your-submissions))
+
+<a href="https://arxiv.org/abs/2406.02176"><img
+src="https://img.shields.io/badge/arXiv-AROMA-b31b1b.svg" height=25em></a>
 
 <p float="left">
   <img src="./images/poster_inference.png" width="400" style="margin-right: 10px;"/>
@@ -21,7 +23,7 @@ To cite our work:
 ```
 
 # 1. Code installation and setup
-## coral installation
+## aroma installation
 ```
 conda create -n aroma python=3.9.0
 pip install -e .
@@ -39,90 +41,34 @@ export MINICONDA_PATH=your_anaconda_path
 
 # 2. Data
 
-* IVP: Cylinder and Airfoil datasets can be downloaded from : https://github.com/deepmind/deepmind-research/tree/master/meshgraphnets
-* Dynamics Modeling: NS and SW data can be generated using https://github.com/mkirchmeyer/DINo and are accessible on this drive : https://drive.google.com/drive/folders/1RlH4E7-dnKOEA6Zur2EdK-HuEaW_PC8w?usp=sharing
-* Navier-Stokes 1e-4 and Navier-Stokes 1e-5 can be downloaded from https://drive.google.com/drive/folders/1UnbQh2WWc6knEHbLn-ZaXrKUZhp7pjt- (Note that NACA-Euler stands for Airfoil in this google drive)
+We detail the **sources** of the datasets used during in this paper:
 
+* CylinderFlow and AirfoilFlow datasets can be downloaded from : https://github.com/deepmind/deepmind-research/tree/master/meshgraphnets
+* Navier Stokes 1e-3 and Shallow Water data can be generated using https://github.com/mkirchmeyer/DINo 
+* Navier-Stokes 1e-4 and Navier-Stokes 1e-5 can be downloaded from https://drive.google.com/drive/folders/1UnbQh2WWc6knEHbLn-ZaXrKUZhp7pjt-
+* Burgers dataset can be generated from https://github.com/brandstetter-johannes/MP-Neural-PDE-Solvers
+
+We uploaded most of the datasets on Hugging Face (https://huggingface.co/sogeeking) and provide scripts to **download** them directly from there in the folder `download_dataset`.
+Therefore you can use those scripts to download efficiently the data.
 
 
 # 3. Run experiments 
-![plot](./images/poster_training.png)
 
-The code runs only on GPU. We provide sbatch configuration files to run the training scripts. They are located in `bash_static` and `bash_dynamics`. 
+The code runs only on GPU. We provide sbatch configuration files to run the training scripts. They are located in `bash` and are organized by datasets.
 We expect the user to have wandb installed in its environment to ease the 2-step training. 
 For all tasks, the first step is to launch an inr.py training. The weights of the inr model are automatically saved under its `run_name`.
-For the second step, i.e. for training the dynamics or inference model, we need to use the previous `run_name` as input to the config file to load the inr model.
-We provide examples of the python scripts that need to be run.
+For the second step, i.e. for training the dynamics or inference model, we need to use the previous `run_name` as input to the config file to load the inr model. The `run_name` can be set in the config file, but is generated randomly by default with wandb.
+We provide examples of the python scripts that need to be run in each bash folder.
 
-## IVP
+For instance, for `burgers` we need to first train the VAE:
+`sbatch bash/burgers/inr_burgers.sh`
+and then once we specified the correct run_name in the config:
+`sbatch bash/burgers/refiner_burgers.sh`
 
-![plot](./images/cylinder_flow_3.png)
 
-  * airfoil-flow: 
-  ``` 
-  python3 static/train/ivp_inr.py "data.dataset_name=airfoil-flow" 'optim.epochs=5000' 'inr_in.w0=5' 'inr_out.w0=5' 'inr_in.latent_dim=128' 'inr_in.hidden_dim=256' 'inr_out.hidden_dim=256' 'inr_out.latent_dim=128' 'model.width=256' 'optim.batch_size=32' 'optim.meta_lr_code=5e-6'
-  ```
-  ```
-  python3 static/train/ivp_regression.py "data.dataset_name=airfoil-flow" "inr.run_name=dandy-lion-4438" "optim.epochs=101"
-  ```
-  * cylinder-flow:
-  ```
-  python3 static/train/ivp_inr.py "data.dataset_name=cylinder-flow" 'optim.epochs=5000' 'inr_in.w0=20' 'inr_out.w0=15' 'inr_in.latent_dim=128' 'inr_out.latent_dim=128' 'optim.epochs=2000' 'model.width=64'
-  ```
-  ```
-  python3 static/train/ivp_regression.py "data.dataset_name=cylinder-flow" "inr.run_name=dandy-puddle-3918" "optim.epochs=2001"
-  ```
- 
 
-## Design
 
-* naca-euler:
-![plot](./images/airfoil_prediction.png)
-```
-python3 static/train/design_inr.py "data.dataset_name=airfoil" 'optim.epochs=5000' 'inr_in.w0=5' 'inr_out.w0=15' 'optim.lr_inr=1e-4' 'optim.meta_lr_code=1e-4'
-```
 
-```
-python3 static/train/design_regression.py "data.dataset_name=airfoil" "inr.run_name=glowing-music-4181" 'optim.epochs=10000'
-```
-* elasticity
-
-![plot](./images/elasticity_prediction.png)
-```
-python3 static/train/design_inr.py "data.dataset_name=elasticity" 'optim.batch_size=64' 'optim.epochs=5000' 'inr_in.w0=10' 'inr_out.w0=15' 'optim.lr_inr=1e-4' 'optim.meta_lr_code=1e-4' 
-```
-```
-python3 static/train/design_regression.py "data.dataset_name=elasticity" "inr.run_name=clone-nerf-herder-4289" 'optim.epochs=10000'
-```
-* pipe
-```
-python3 static/train/design_inr.py "data.dataset_name=pipe" 'optim.batch_size=16' 'optim.epochs=5000' 'inr_in.w0=5' 'inr_out.w0=10' 'inr_in.hidden_dim=128' 'inr_in.depth=5' 'inr_out.hidden_dim=128' 'inr_out.depth=5' 'optim.lr_inr=5e-5' 'optim.meta_lr_code=5e-5' 
-```
-
-```
-python3 static/train/design_regression.py "data.dataset_name=pipe" "inr.run_name=super-plasma-4149" 'optim.epochs=10000' 'model.width=128' 'model.depth=3' 'inr.inner_steps=3' 
-```
-
-## Dynamics modeling
-* navier-stokes:
-![plot](./images/ns-qual-res.jpg)
-```
-python3 inr/inr.py "data.sub_from=$sub_from" "data.same_grid=$same_grid" "data.dataset_name=$dataset_name" "inr.model_type=$model_type" "data.seq_inter_len=$seq_inter_len" "data.seq_extra_len=$seq_extra_len" "data.sub_tr=$sub_tr" "data.sub_te=$sub_te" "optim.lr_inr=$lr_inr" "inr.depth=$depth" "inr.latent_dim=$latent_dim" "inr.hidden_dim=$hidden_dim" "optim.batch_size=$batch_size" "optim.epochs=$epochs" "wandb.saved_checkpoint=$saved_checkpoint" #"wandb.name=$name" "wandb.id=$id" "wandb.dir=$dir" "wandb.checkpoint_path=$checkpoint_path"
-```
-
-```
-python3 dynamics_modeling/train.py "data.sub_from=$sub_from" "data.same_grid=$same_grid" "data.dataset_name=$dataset_name" "dynamics.width=$width" "dynamics.depth=$depth" "data.sub_tr=$sub_tr" "data.sub_te=$sub_te" "optim.epochs=$epochs" "data.seq_inter_len=$seq_inter_len" "data.seq_extra_len=$seq_extra_len" "optim.batch_size=$batch_size" "optim.lr=$lr"  "dynamics.teacher_forcing_update=$teacher_forcing_update" "inr.run_name=$run_name"
-```
- 
-* shallow-water:
-```
-python3 inr/inr.py "data.sub_from=$sub_from" "data.same_grid=$same_grid" "data.dataset_name=$dataset_name" "data.data_to_encode=$data_to_encode" "data.seq_inter_len=$seq_inter_len" "data.seq_extra_len=$seq_extra_len" "data.sub_tr=$sub_tr" "data.sub_te=$sub_te" "optim.lr_inr=$lr_inr" "inr.depth=$depth" "inr.latent_dim=$latent_dim" "inr.hidden_dim=$hidden_dim" "optim.batch_size=$batch_size" "inr.w0=$w0" "optim.epochs=$epochs" "wandb.saved_checkpoint=$saved_checkpoint" #"wandb.name=$name" "wandb.id=$id" "wandb.dir=$dir" "wandb.checkpoint_path=$checkpoint_path"  
-```
-```
-python3 dynamics_modeling/train.py "data.sub_from=$sub_from" "data.same_grid=$same_grid" "data.dataset_name=$dataset_name" "dynamics.width=$width" "dynamics.depth=$depth" "data.sub_tr=$sub_tr" "data.sub_te=$sub_te" "optim.epochs=$epochs" "data.seq_inter_len=$seq_inter_len" "data.seq_extra_len=$seq_extra_len" "optim.batch_size=$batch_size" "optim.lr=$lr"  "dynamics.teacher_forcing_update=$teacher_forcing_update" "inr.run_dict=$run_dict"
-```
-
-with dataset_name='navier-stokes-dino' or 'shallow-water-dino'.
 
 
 
