@@ -16,7 +16,7 @@ python3 download_data_hugging_face.py local_dir=$LOCAL_DIR repo_id=sogeeking/nav
 
 # 3. NS 1e-5
 ```bash
-python3 download_data_hugging_face.py local_dir=$LOCAL_DIR repo_id=sogeeking/navier-stokes-1e-5
+python3 download_data_hugging_face.py local_dir=$LOCAL_DIR repo_id=sogeeking/navier-stokes-1e-5 file_list=[NavierStokes_V1e-5_N1200_T20.mat]
 ```
 
 # 4. SW
