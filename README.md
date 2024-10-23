@@ -6,8 +6,8 @@ Official PyTorch implementation of AROMA | [Accepted at Neurips 2024](https://op
 <a href="https://arxiv.org/abs/2406.02176"><img
 src="https://img.shields.io/badge/arXiv-AROMA-b31b1b.svg" height=25em></a>
 
-<p float="left">
-  <img src="./assets/new_aroma_inference_v2.j2" width="400"/>
+<p float="center">
+  <img src="./assets/new_aroma_inference_v2.jp2" width="800"/>
 </p>
 
 To cite our work:
