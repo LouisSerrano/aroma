@@ -7,7 +7,7 @@ Official PyTorch implementation of AROMA | [Accepted at Neurips 2024](https://op
 src="https://img.shields.io/badge/arXiv-AROMA-b31b1b.svg" height=25em></a>
 
 <p float="center">
-  <img src="./assets/new_aroma_inference_v2.jp2" width="800"/>
+  <img src="./assets/new_aroma_inference_v2.jpg" width="800"/>
 </p>
 
 To cite our work:
